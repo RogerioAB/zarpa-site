@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Zarpa · Da ideia ao app publicado</title>
+<meta name="description" content="A Zarpa transforma ideias em apps publicados. Rápido, original e sem ficar ancorado no porto.">
+<meta property="og:title" content="Zarpa · Sua ideia não nasceu pra ficar no porto.">
+<meta property="og:description" content="Da ideia ao app publicado, com velocidade e originalidade.">
+<meta property="og:url" content="https://zarpa.tech">
+<meta name="theme-color" content="#0d2b3a">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='12' fill='%23ffc21a'/%3E%3Cpath d='M13 13h22L15 31h20' fill='none' stroke='%230d2b3a' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M10 38c3-2.4 6-2.4 9 0s6 2.4 9 0 6-2.4 9 0' fill='none' stroke='%230d2b3a' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: carta náutica. Fundo claro de papel de carta, linhas de rota tracejadas ligando as seções, amarelo de bandeira de sinal como único acento forte. */
+:root{
+  --mar:#0d2b3a;        /* azul-petróleo profundo: texto e superfícies escuras */
+  --espuma:#f1f4ef;     /* papel de carta náutica */
+  --sinal:#ffc21a;      /* amarelo de bandeira de sinal: acento */
+  --corrente:#1e8c84;   /* verde-água: apoio, links, rotas */
+  --nevoa:#d7e0dc;      /* linhas e bordas */
+  --casco:#ffffff;      /* superfícies elevadas */
+  --tinta-suave:#4b6470;
+  --sobre-sinal:#0d2b3a;
+  --f-display:"Unbounded","Arial Black",system-ui,sans-serif;
+  --f-corpo:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --bg:var(--espuma);--fg:var(--mar);--superficie:var(--casco);--escuro:#0d2b3a;--sobre-escuro:#f1f4ef;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#08202b;--fg:#e8efec;--superficie:#0f2c3a;--nevoa:#1f4150;--tinta-suave:#9fb5bd;--corrente:#3cc2b5;--escuro:#041820;--sobre-escuro:#e8efec;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#08202b;--fg:#e8efec;--superficie:#0f2c3a;--nevoa:#1f4150;--tinta-suave:#9fb5bd;--corrente:#3cc2b5;--escuro:#041820;--sobre-escuro:#e8efec;color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-corpo);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:1160px;margin-inline:auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.08;letter-spacing:-.01em}
+p{margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--sinal);outline-offset:3px;border-radius:4px}
+.mono{font-family:var(--f-mono);font-size:12.5px;letter-spacing:.08em;text-transform:uppercase}
+.eyebrow{color:var(--corrente);display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:22px;border-top:2px dashed currentColor}
+
+/* Navegação */
+header.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--nevoa)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:14px}
+.marca{display:flex;align-items:center;gap:10px;text-decoration:none}
+.marca svg{width:34px;height:34px;flex:none}
+.marca b{font-family:var(--f-display);font-weight:800;font-size:22px;letter-spacing:-.02em}
+.marca small{font-family:var(--f-mono);font-size:12px;color:var(--tinta-suave)}
+.nav ul{display:flex;gap:26px;list-style:none;margin:0;padding:0;font-size:15px;font-weight:500}
+.nav ul a{text-decoration:none;opacity:.8}.nav ul a:hover{opacity:1}
+.btn{display:inline-flex;align-items:center;gap:10px;font-family:var(--f-corpo);font-weight:600;font-size:16px;text-decoration:none;border:0;cursor:pointer;border-radius:999px;padding:14px 24px;transition:transform .15s ease,box-shadow .15s ease}
+.btn-sinal{background:var(--sinal);color:var(--sobre-sinal);box-shadow:0 0 0 0 var(--sinal)}
+.btn-sinal:hover{transform:translateY(-2px);box-shadow:0 8px 0 -2px color-mix(in srgb,var(--sinal) 45%,transparent)}
+.btn-linha{background:transparent;color:var(--fg);border:1.5px solid var(--nevoa)}
+.btn-linha:hover{border-color:var(--fg)}
+.nav .btn{padding:10px 18px;font-size:14px}
+@media (max-width:820px){.nav ul{display:none}}
+
+/* Hero */
+.hero{position:relative;padding-block:72px 56px;overflow:hidden}
+.hero .wrap{display:grid;grid-template-columns:1.25fr .9fr;gap:56px;align-items:center}
+.hero h1{font-size:clamp(40px,6.4vw,84px);font-weight:800;margin-block:18px 24px}
+.hero h1 em{font-style:normal;position:relative;white-space:nowrap}
+.hero h1 em::after{content:"";position:absolute;left:0;right:0;bottom:.04em;height:.2em;background:var(--sinal);z-index:-1;transform-origin:left;animation:sublinha .9s .3s cubic-bezier(.6,0,.2,1) both}
+@keyframes sublinha{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.hero .lead{font-size:clamp(18px,2vw,21px);color:var(--tinta-suave);max-width:34em}
+.acoes{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+.coords{margin-top:40px;display:flex;flex-wrap:wrap;gap:8px 28px;color:var(--tinta-suave)}
+.coords span b{color:var(--fg);font-weight:600}
+.hero > svg.rota{position:absolute;inset:auto 0 0 0;width:100%;height:120px;pointer-events:none;color:var(--corrente);opacity:.5}
+
+/* Quadro de partidas */
+.quadro{background:var(--escuro);color:var(--sobre-escuro);border-radius:18px;padding:22px;box-shadow:0 30px 60px -30px rgba(4,24,32,.55);min-width:0}
+.quadro-top{display:flex;justify-content:space-between;align-items:center;color:#9fb5bd;margin-bottom:16px}
+.quadro-top i{width:8px;height:8px;border-radius:50%;background:var(--sinal);display:inline-block;margin-right:8px;animation:pisca 1.6s infinite}
+@keyframes pisca{50%{opacity:.25}}
+.linha{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;padding:13px 0;border-top:1px dashed rgba(241,244,239,.18)}
+.linha .ideia{font-weight:500;font-size:15.5px;line-height:1.35}
+.linha .ideia small{display:block;font-family:var(--f-mono);font-size:11.5px;color:#9fb5bd;letter-spacing:.05em;margin-top:3px}
+.status{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:5px 9px;border-radius:6px;white-space:nowrap}
+.s-cais{background:rgba(241,244,239,.1);color:#cfdcd8}
+.s-rota{background:rgba(60,194,181,.18);color:#6fe0d4}
+.s-zarpou{background:var(--sinal);color:#0d2b3a}
+.quadro-nota{margin-top:12px;font-size:12.5px;color:#9fb5bd}
+
+/* Seções */
+section{padding-block:96px}
+.cab{display:grid;gap:18px;max-width:760px;margin-bottom:52px}
+.cab h2{font-size:clamp(30px,4.2vw,52px);font-weight:700}
+.cab p{font-size:19px;color:var(--tinta-suave)}
+
+.problema{background:var(--escuro);color:var(--sobre-escuro)}
+.problema .wrap{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:end}
+.problema h2{font-size:clamp(30px,4.4vw,56px);font-weight:700}
+.problema p{font-size:19px;color:#b8cbd0;max-width:32em}
+.problema p + p{margin-top:16px}
+.ancoras{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.ancoras span{border:1px dashed rgba(241,244,239,.3);border-radius:999px;padding:7px 14px;font-size:14px;color:#cfdcd8}
+
+/* Rota (como funciona) */
+.rota-lista{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,1fr);gap:0;position:relative}
+.rota-lista::before{content:"";position:absolute;left:0;right:0;top:27px;border-top:2px dashed var(--corrente);opacity:.6}
+.rota-lista li{position:relative;padding-right:22px;min-width:0}
+.boia{width:56px;height:56px;border-radius:50%;background:var(--bg);border:2px solid var(--corrente);display:grid;place-items:center;font-family:var(--f-mono);font-weight:600;font-size:14px;color:var(--corrente);position:relative;margin-bottom:22px}
+.rota-lista li:last-child .boia{background:var(--sinal);border-color:var(--sinal);color:var(--sobre-sinal)}
+.rota-lista h3{font-size:19px;font-weight:700;margin-bottom:8px}
+.rota-lista p{color:var(--tinta-suave);font-size:15.5px}
+@media (max-width:900px){
+  .rota-lista{grid-template-columns:1fr;gap:28px}
+  .rota-lista::before{left:27px;right:auto;top:0;bottom:0;border-top:0;border-left:2px dashed var(--corrente)}
+  .rota-lista li{display:grid;grid-template-columns:56px 1fr;gap:20px;padding-right:0}
+  .boia{margin-bottom:0}
+}
+
+/* Por que */
+.porque{border-top:1px solid var(--nevoa)}
+.grade{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--nevoa);border:1px solid var(--nevoa);border-radius:16px;overflow:hidden}
+.grade > div{background:var(--bg);padding:30px 26px;display:grid;gap:12px;align-content:start;min-width:0}
+.grade .num{font-family:var(--f-display);font-size:38px;font-weight:800;line-height:1}
+.grade .num small{font-size:15px;font-family:var(--f-mono);font-weight:600;color:var(--corrente);margin-left:4px}
+.grade h3{font-size:18px;font-weight:700}
+.grade p{color:var(--tinta-suave);font-size:15.5px}
+@media (max-width:900px){.grade{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.grade{grid-template-columns:1fr}}
+
+/* O que construímos */
+.carga{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.item{background:var(--superficie);border:1px solid var(--nevoa);border-radius:14px;padding:24px;display:grid;gap:10px;align-content:start;transition:transform .2s ease,border-color .2s ease;min-width:0}
+.item:hover{transform:translateY(-3px);border-color:var(--corrente)}
+.item .mono{color:var(--corrente)}
+.item h3{font-size:19px;font-weight:700}
+.item p{color:var(--tinta-suave);font-size:15.5px}
+.item.destaque{background:var(--sinal);border-color:var(--sinal);color:var(--sobre-sinal)}
+.item.destaque p,.item.destaque .mono{color:var(--sobre-sinal)}
+@media (max-width:900px){.carga{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.carga{grid-template-columns:1fr}}
+
+/* CTA */
+.cta{background:var(--escuro);color:var(--sobre-escuro);position:relative;overflow:hidden}
+.cta .wrap{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+.cta h2{font-size:clamp(34px,5vw,64px);font-weight:800}
+.cta h2 span{color:var(--sinal)}
+.cta .texto p{font-size:19px;color:#b8cbd0;margin-top:20px;max-width:28em}
+.email{margin-top:28px;display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.email code{font-family:var(--f-mono);font-size:16px;background:rgba(241,244,239,.08);padding:10px 14px;border-radius:10px;user-select:all}
+.copiar{background:transparent;color:#e8efec;border:1px solid rgba(241,244,239,.3);border-radius:10px;padding:10px 14px;font:600 14px var(--f-corpo);cursor:pointer}
+form{background:#f1f4ef;color:#0d2b3a;border-radius:18px;padding:28px;display:grid;gap:16px;min-width:0}
+label{display:grid;gap:6px;font-size:14px;font-weight:600}
+input,textarea{font:16px var(--f-corpo);color:#0d2b3a;background:#fff;border:1.5px solid #c9d4cf;border-radius:10px;padding:12px 14px;width:100%}
+input:focus,textarea:focus{outline:none;border-color:#1e8c84;box-shadow:0 0 0 3px rgba(30,140,132,.2)}
+textarea{min-height:120px;resize:vertical}
+form .btn{justify-content:center;margin-top:4px}
+.ok{background:#e4f3ef;border:1px solid #1e8c84;border-radius:10px;padding:14px;font-size:15px}
+@media (max-width:900px){.hero .wrap,.problema .wrap,.cta .wrap{grid-template-columns:1fr;gap:40px}}
+
+footer{padding-block:40px;border-top:1px solid var(--nevoa)}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:20px;align-items:center;color:var(--tinta-suave);font-size:14.5px}
+footer nav{display:flex;flex-wrap:wrap;gap:20px}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+
+</head>
+<body>
+<header class="nav">
+  <div class="wrap">
+    <a class="marca" href="#topo" aria-label="Zarpa, início">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="12" fill="var(--sinal)"/><path d="M13 13h22L15 31h20" fill="none" stroke="#0d2b3a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 38c3-2.4 6-2.4 9 0s6 2.4 9 0 6-2.4 9 0" fill="none" stroke="#0d2b3a" stroke-width="2.6" stroke-linecap="round"/></svg>
+      <b>zarpa</b><small>.tech</small>
+    </a>
+    <ul>
+      <li><a href="#como">Como funciona</a></li>
+      <li><a href="#porque">Por que a Zarpa</a></li>
+      <li><a href="#construimos">O que construímos</a></li>
+    </ul>
+    <a class="btn btn-sinal" href="#contato">Contar minha ideia</a>
+  </div>
+</header>
+
+<main id="topo">
+  <section class="hero" style="padding-block:72px 64px">
+    <div class="wrap">
+      <div>
+        <span class="mono eyebrow">Estúdio de apps · Zarpa</span>
+        <h1>Sua ideia não nasceu pra ficar no <em>porto.</em></h1>
+        <p class="lead">A Zarpa transforma ideias em apps publicados. Rápido, original e sem a papelada infinita que deixa todo projeto parado no cais.</p>
+        <div class="acoes">
+          <a class="btn btn-sinal" href="#contato">Quero zarpar minha ideia <span aria-hidden="true">→</span></a>
+          <a class="btn btn-linha" href="#como">Ver como funciona</a>
+        </div>
+        <div class="coords mono">
+          <span>Partida <b>sua ideia</b></span>
+          <span>Destino <b>App Store · Play · Web</b></span>
+          <span>Vento <b>a favor</b></span>
+        </div>
+      </div>
+      <aside class="quadro" aria-label="Quadro de partidas, exemplos de ideias">
+        <div class="quadro-top mono"><span><i></i>Quadro de partidas</span><span id="hora">--:--</span></div>
+        <div id="linhas"></div>
+        <p class="quadro-nota">Exemplos do tipo de ideia que tiramos do porto.</p>
+      </aside>
+    </div>
+    <svg class="rota" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 90 C 200 40, 380 120, 600 70 S 1000 20, 1200 60" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="6 9"/></svg>
+  </section>
+
+  <section class="problema">
+    <div class="wrap">
+      <div>
+        <span class="mono eyebrow" style="color:var(--sinal)">O problema</span>
+        <h2 style="margin-top:18px">Tem muita ideia boa ancorada por aí.</h2>
+      </div>
+      <div>
+        <p>Ela mora num caderno, num áudio que você mandou pra si mesmo, num grupo de WhatsApp. Todo mundo acha genial, mas ninguém tira do lugar.</p>
+        <p>Orçamento que assusta, prazo que nunca chega, reunião que gera outra reunião. Enquanto isso, alguém lança primeiro.</p>
+        <div class="ancoras" aria-label="O que segura uma ideia no porto">
+          <span>orçamento opaco</span><span>prazo sem fim</span><span>tecniquês</span><span>reunião sobre a reunião</span><span>template genérico</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="como">
+    <div class="wrap">
+      <div class="cab">
+        <span class="mono eyebrow">A rota</span>
+        <h2>A gente solta as amarras.</h2>
+        <p>Você acompanha cada trecho da viagem e chega com um app de verdade, na loja e nas mãos das pessoas.</p>
+      </div>
+      <ol class="rota-lista">
+        <li><div class="boia">01</div><div><h3>Embarque</h3><p>Você conta a ideia do jeito que ela estiver. Rabisco vale.</p></div></li>
+        <li><div class="boia">02</div><div><h3>Rota</h3><p>Definimos o essencial, cortamos o excesso e fechamos um plano curto, com prazo e preço.</p></div></li>
+        <li><div class="boia">03</div><div><h3>Construção</h3><p>Design e código em ciclos rápidos. Você testa versões reais desde cedo.</p></div></li>
+        <li><div class="boia">04</div><div><h3>Zarpar</h3><p>Publicação na App Store, Google Play ou web. A ideia está no mundo.</p></div></li>
+        <li><div class="boia">05</div><div><h3>Navegação</h3><p>Depois do lançamento, seguimos juntos com ajustes e novas versões.</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="porque" class="porque">
+    <div class="wrap">
+      <div class="cab">
+        <span class="mono eyebrow">Por que a Zarpa</span>
+        <h2>Pra quem prefere lançar a planejar pra sempre.</h2>
+      </div>
+      <div class="grade">
+        <div><span class="num">sem<small>anas</small></span><h3>Velocidade de verdade</h3><p>Primeira versão no ar em semanas, não em semestres.</p></div>
+        <div><span class="num">1<small>de 1</small></span><h3>Original</h3><p>Nada de template com logo trocado. Cada app tem a cara da ideia que o originou.</p></div>
+        <div><span class="num">0<small>tecniquês</small></span><h3>Conversa clara</h3><p>Você entende o que está sendo feito e por quê, em português.</p></div>
+        <div><span class="num">A→Z</span><h3>Do início ao fim</h3><p>Da ideia solta até o app publicado, num só lugar.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="construimos" style="padding-top:0">
+    <div class="wrap">
+      <div class="cab">
+        <span class="mono eyebrow">Carga a bordo</span>
+        <h2>O que a gente constrói.</h2>
+      </div>
+      <div class="carga">
+        <div class="item"><span class="mono">iOS · Android</span><h3>Apps para celular</h3><p>Nativos ou multiplataforma, prontos para as lojas.</p></div>
+        <div class="item"><span class="mono">Navegador</span><h3>Aplicativos web</h3><p>Plataformas, painéis e sistemas que rodam em qualquer tela.</p></div>
+        <div class="item"><span class="mono">Validação</span><h3>MVPs</h3><p>A menor versão que prova se o negócio fica de pé.</p></div>
+        <div class="item"><span class="mono">Empresas</span><h3>Ferramentas internas</h3><p>Processos que hoje vivem em planilha viram app.</p></div>
+        <div class="item"><span class="mono">Marca + produto</span><h3>Design de produto</h3><p>Interface, protótipo e identidade pensados junto com o código.</p></div>
+        <div class="item destaque"><span class="mono">Fora da caixa</span><h3>A ideia sem categoria</h3><p>Aquela que não cabe em nenhum item acima. Essa é a nossa preferida.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contato" class="cta">
+    <div class="wrap">
+      <div class="texto">
+        <span class="mono eyebrow" style="color:var(--sinal)">Última chamada</span>
+        <h2 style="margin-top:18px">A maré está boa. <span>Bora?</span></h2>
+        <p>Conta sua ideia em poucas linhas. A gente responde em até 48 horas com um caminho para tirá-la do porto.</p>
+        <div class="email"><code id="end">contato@zarpa.tech</code><button class="copiar" id="copiar" type="button">Copiar e-mail</button></div>
+      </div>
+      <form id="form" novalidate>
+        <label for="nome">Nome<input id="nome" name="nome" autocomplete="name" required></label>
+        <label for="mail">E-mail<input id="mail" name="mail" type="email" autocomplete="email" required></label>
+        <label for="zap">WhatsApp (opcional)<input id="zap" name="zap" type="tel" autocomplete="tel"></label>
+        <label for="ideia">Qual é a sua ideia?<textarea id="ideia" name="ideia" required placeholder="Ex.: um app para pequenos restaurantes do bairro receberem pedidos sem pagar taxa de marketplace."></textarea></label>
+        <button class="btn btn-sinal" type="submit">Contar minha ideia</button>
+        <div class="ok" id="ok" hidden></div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span><b style="font-family:var(--f-display);color:var(--fg)">zarpa</b> · Ideias zarpam aqui.</span>
+    <nav><span>contato@zarpa.tech</span><span>@zarpa</span><span>LinkedIn</span></nav>
+    <span>© 2026 Zarpa</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var ideias=[
+    ["App de pedidos para restaurantes do bairro","Mobile · iOS e Android","s-zarpou","Zarpou"],
+    ["Agenda online para estúdio de tatuagem","Web · agendamento","s-rota","Em rota"],
+    ["MVP de troca de livros entre vizinhos","MVP · validação","s-rota","Em rota"],
+    ["Controle de estoque que hoje é planilha","Ferramenta interna","s-cais","Embarque"],
+    ["Clube de assinatura de café especial","Web + app","s-zarpou","Zarpou"],
+    ["Check-in de alunos para academia","Mobile","s-cais","Embarque"],
+    ["Marketplace de aulas particulares","Web · marketplace","s-rota","Em rota"]
+  ];
+  var box=document.getElementById('linhas'),i=0;
+  function render(){
+    box.innerHTML='';
+    for(var k=0;k<4;k++){
+      var d=ideias[(i+k)%ideias.length];
+      var el=document.createElement('div');el.className='linha';
+      el.innerHTML='<div class="ideia">'+d[0]+'<small>'+d[1]+'</small></div><span class="status '+d[2]+'">'+d[3]+'</span>';
+      box.appendChild(el);
+    }
+  }
+  render();
+  if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){setInterval(function(){i=(i+1)%ideias.length;render()},3200)}
+  function hora(){var n=new Date();document.getElementById('hora').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')}
+  hora();setInterval(hora,30000);
+
+  document.getElementById('copiar').addEventListener('click',function(){
+    var b=this,t=document.getElementById('end').textContent;
+    function sel(){var r=document.createRange();r.selectNodeContents(document.getElementById('end'));var s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Selecionado, use Ctrl+C'}
+    try{navigator.clipboard.writeText(t).then(function(){b.textContent='Copiado'},sel)}catch(e){sel()}
+  });
+
+  document.getElementById('form').addEventListener('submit',function(e){
+    e.preventDefault();
+    var ok=document.getElementById('ok'),f=e.target;
+    if(!f.nome.value.trim()||!f.mail.value.includes('@')||!f.ideia.value.trim()){
+      ok.hidden=false;ok.textContent='Preencha nome, um e-mail válido e a sua ideia para continuar.';return;
+    }
+    ok.hidden=false;
+    ok.textContent='Obrigado, '+f.nome.value.trim().split(' ')[0]+'. Este formulário ainda é uma prévia e não envia mensagens. Por enquanto, mande sua ideia para contato@zarpa.tech.';
+  });
+})();
+</script>
+
+</body>
+</html>
