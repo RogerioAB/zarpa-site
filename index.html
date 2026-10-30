@@ -44,6 +44,7 @@
       "founder": {"@type": "Person", "name": "Rogério Alves de Barros"},
       "areaServed": "BR",
       "knowsLanguage": "pt-BR",
+      "knowsAbout": ["desenvolvimento de aplicativos", "apps iOS e Android", "aplicativos web", "MVP", "design de produto"],
       "sameAs": ["https://www.instagram.com/zarpa.tech/"]
     },
     {
@@ -53,6 +54,60 @@
       "name": "Zarpa Apps",
       "inLanguage": "pt-BR",
       "publisher": {"@id": "https://zarpa.tech/#org"}
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://zarpa.tech/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "O que é a Zarpa?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A Zarpa (Zarpa Apps, zarpa.tech) é um estúdio brasileiro de criação de aplicativos sob medida. Pegamos a ideia do cliente, do jeito que ela estiver, e entregamos o app publicado na App Store, no Google Play ou na web."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Que tipo de aplicativo a Zarpa desenvolve?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Apps para celular (iOS e Android, nativos ou multiplataforma), aplicativos web, MVPs para validar negócios, ferramentas internas para empresas e design de produto. Ideias que não se encaixam em nenhuma categoria também são bem-vindas."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Como funciona o processo?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "São cinco etapas: Embarque (você conta a ideia), Rota (definimos o essencial e fechamos um plano curto com prazo e preço), Construção (design e código em ciclos rápidos, com versões para testar desde cedo), Zarpar (publicação nas lojas ou na web) e Navegação (ajustes e novas versões depois do lançamento)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quanto tempo leva para criar um app?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A primeira versão costuma ficar no ar em semanas, não em semestres. O prazo exato é definido no plano da etapa Rota, conforme o tamanho da ideia."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Preciso entender de tecnologia para contratar a Zarpa?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Não. A conversa é em português claro, sem tecniquês, e você acompanha o que está sendo feito e por quê."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Como entro em contato com a Zarpa?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Pelo e-mail contato@zarpa.tech, pelo formulário em zarpa.tech ou pelo Instagram @zarpa.tech."
+          }
+        }
+      ]
     }
   ]
 }
@@ -211,6 +266,14 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:20px;
 footer nav{display:flex;flex-wrap:wrap;gap:20px}
 footer nav a{color:inherit;text-decoration:none}footer nav a:hover{color:var(--corrente)}
 
+.faq-lista{display:grid;gap:12px;max-width:860px}
+.faq details{background:var(--superficie);border:1px solid var(--nevoa);border-radius:14px;padding:18px 22px}
+.faq summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px;align-items:center}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-family:var(--f-mono);font-size:22px;color:var(--corrente)}
+.faq details[open] summary::after{content:"−"}
+.faq summary h3{font-size:18px;line-height:1.3}
+.faq details p{margin:12px 0 0;color:var(--tinta-suave)}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 
@@ -226,6 +289,7 @@ footer nav a{color:inherit;text-decoration:none}footer nav a:hover{color:var(--c
       <li><a href="#como">Como funciona</a></li>
       <li><a href="#porque">Por que a Zarpa</a></li>
       <li><a href="#construimos">O que construímos</a></li>
+      <li><a href="#perguntas">Perguntas</a></li>
     </ul>
     <a class="btn btn-sinal" href="#contato">Contar minha ideia</a>
   </div>
@@ -318,6 +382,23 @@ footer nav a{color:inherit;text-decoration:none}footer nav a:hover{color:var(--c
         <div class="item"><span class="mono">Empresas</span><h3>Ferramentas internas</h3><p>Processos que hoje vivem em planilha viram app.</p></div>
         <div class="item"><span class="mono">Marca + produto</span><h3>Design de produto</h3><p>Interface, protótipo e identidade pensados junto com o código.</p></div>
         <div class="item destaque"><span class="mono">Fora da caixa</span><h3>A ideia sem categoria</h3><p>Aquela que não cabe em nenhum item acima. Essa é a nossa preferida.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="perguntas" class="faq" style="padding-top:0">
+    <div class="wrap">
+      <div class="cab">
+        <span class="mono eyebrow">Perguntas frequentes</span>
+        <h2>Antes de zarpar.</h2>
+      </div>
+      <div class="faq-lista">
+        <details><summary><h3>O que é a Zarpa?</h3></summary><p>A Zarpa (Zarpa Apps, zarpa.tech) é um estúdio brasileiro de criação de aplicativos sob medida. Pegamos a ideia do cliente, do jeito que ela estiver, e entregamos o app publicado na App Store, no Google Play ou na web.</p></details>
+        <details><summary><h3>Que tipo de aplicativo a Zarpa desenvolve?</h3></summary><p>Apps para celular (iOS e Android, nativos ou multiplataforma), aplicativos web, MVPs para validar negócios, ferramentas internas para empresas e design de produto. Ideias que não se encaixam em nenhuma categoria também são bem-vindas.</p></details>
+        <details><summary><h3>Como funciona o processo?</h3></summary><p>São cinco etapas: Embarque (você conta a ideia), Rota (definimos o essencial e fechamos um plano curto com prazo e preço), Construção (design e código em ciclos rápidos, com versões para testar desde cedo), Zarpar (publicação nas lojas ou na web) e Navegação (ajustes e novas versões depois do lançamento).</p></details>
+        <details><summary><h3>Quanto tempo leva para criar um app?</h3></summary><p>A primeira versão costuma ficar no ar em semanas, não em semestres. O prazo exato é definido no plano da etapa Rota, conforme o tamanho da ideia.</p></details>
+        <details><summary><h3>Preciso entender de tecnologia para contratar a Zarpa?</h3></summary><p>Não. A conversa é em português claro, sem tecniquês, e você acompanha o que está sendo feito e por quê.</p></details>
+        <details><summary><h3>Como entro em contato com a Zarpa?</h3></summary><p>Pelo e-mail contato@zarpa.tech, pelo formulário em zarpa.tech ou pelo Instagram @zarpa.tech.</p></details>
       </div>
     </div>
   </section>

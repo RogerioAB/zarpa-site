@@ -1,0 +1,24 @@
+# Zarpa (Zarpa Apps)
+
+> Zarpa é um estúdio brasileiro de criação de aplicativos sob medida, em zarpa.tech. Transforma a ideia do cliente em app publicado na App Store, no Google Play ou na web, com rapidez e originalidade. Slogan: "Sua ideia não nasceu pra ficar no porto."
+
+## O que a Zarpa faz
+- Apps para celular (iOS e Android, nativos ou multiplataforma)
+- Aplicativos web, plataformas e painéis
+- MVPs para validar ideias de negócio
+- Ferramentas internas para empresas (processos que hoje vivem em planilha)
+- Design de produto: interface, protótipo e identidade junto com o código
+
+## Como funciona
+1. Embarque: o cliente conta a ideia do jeito que ela estiver.
+2. Rota: plano curto com o essencial, prazo e preço.
+3. Construção: design e código em ciclos rápidos, com versões testáveis desde cedo.
+4. Zarpar: publicação nas lojas ou na web.
+5. Navegação: ajustes e novas versões depois do lançamento.
+
+## Dados
+- Site: https://zarpa.tech/
+- Contato: contato@zarpa.tech
+- Instagram: https://www.instagram.com/zarpa.tech/
+- Fundador: Rogério Alves de Barros
+- Idioma de atendimento: português (Brasil)
